@@ -16,11 +16,11 @@ class show_custom_post_widget extends WP_Widget {
 	}
 
 	public function form( $instance ) {
-		if ( isset( $instance[ 'post_per_page' ] ) ) {
-			$post_per_page = $instance[ 'post_per_page' ];
+		if ( isset( $instance[ 'post_per_page' ] ) ) { //om post_per_page har ett värde
+			$post_per_page = $instance[ 'post_per_page' ];//populera input fältet
 		}
 		else {
-			$post_per_page = __( '3', 'text_domain' );
+			$post_per_page = __( '3', 'text_domain' ); //placeholder siffra för input fält
 		}
 		?>
 		<p>
