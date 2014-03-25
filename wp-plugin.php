@@ -19,20 +19,6 @@ define('PLUGIN_BASE_DIR_LONG', dirname(__FILE__));
 
 /*Här laddar vi in pluginens filer*/
 
-if (!function_exists('load_scripts_and_styles')) {
-    
-      function load_scripts_and_styles() {
-
-   
-
-            // wp_register_style( 'fontawesome', GUI_BASE_URL . 'font-awesome.min.css' );
-           
-            // wp_register_script( 'template-switch', GUI_BASE_URL . 'js/template-switch.js', array( 'jquery' ), '1', true );
-           
-            // wp_enqueue_style('fontawesome');        
-            // wp_enqueue_script('template-switch');
-        }
-}
 /*Ladda in custom post type*/
 require_once(PLUGIN_BASE_DIR_LONG . '/custom.php');
 /*Ladda in widget*/

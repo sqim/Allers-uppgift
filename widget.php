@@ -67,7 +67,7 @@ class show_custom_post_widget extends WP_Widget {
 			$excerpt = $this->get_excerpt_by_id($post->ID, 50); //hämtar en sammanfattning av postens innehåll
 			$html[] = $excerpt;
 		}
-		$output = implode(" ", $html); //gör om array till sträng
+		$output = implode(" ", $html);
 		echo $output; //visar ut html
 	}
 
