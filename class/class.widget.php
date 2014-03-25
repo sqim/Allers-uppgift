@@ -1,87 +1,124 @@
 <?php
 
 class Show_Custom_Post_Widget extends WP_Widget {
-	
-	// constructor
+
+	/**
+	 * Sets up the widgets name
+	 */
 	function show_custom_post_widget() {
 		parent::WP_Widget(false, $name = __('Show custom post', 'show_custom_post_widget') );
 	}
-	/*
-	*Hämtar vår custom_post_type
-	*/
-	public function get_custom_posts($post_per_page){
-		//vilken typ av post ska hämtas
-		$args = array( 'post_type' => 'custom_post', 'posts_per_page' => $post_per_page );
+
+	/**
+   * Get custom posts
+   *
+   * @param Int $post_per_page
+   *   Number of posts to fetch
+   * @return Array
+   *   Returns an array of posts
+   */
+   public function get_custom_posts($post_per_page){
+		$args = array( 'post_type' => 'custom_post', 'posts_per_page' => $post_per_page );//Gets our custom post
 		//hämta posts
 		$posts = get_posts( $args );
 		return $posts;
 	}
-	/*
-	* Inställningar för widget
-	*/
+
+	/**
+   * Widget Form
+   *
+   * @param Array $instance
+   *   Number of posts to fetch
+   * @return Html
+   *   Returns form field
+   */
 	public function form( $instance ) {
-		if ( isset( $instance[ 'post_per_page' ] ) ) { //om post_per_page har ett värde
-			$post_per_page = $instance[ 'post_per_page' ];//populera input fältet
+		if ( isset( $instance[ 'post_per_page' ] ) ) { //if post_per_page has a value
+			$post_per_page = $instance[ 'post_per_page' ];//populate input field
 		}
 		else {
-			$post_per_page = __( '3', 'text_domain' ); //placeholder siffra för input fält
+			$post_per_page = __( '3', 'text_domain' ); //placeholder
 		}
-		include '/tempaltes/form.php';
+		include '/tempaltes/tpl.form.php';
 	}
-	/*
-	*Updaterar våra inställningar
-	*/
+
+	/**
+   * Update settings
+   *
+   * @param Array $new_instance
+   *   New settings
+   * @param Array $old_instance
+   *   Old settings
+   * @return Array
+   *   Returns settings
+   */
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
-		$instance['post_per_page'] = ( ! empty( $new_instance['post_per_page'] ) ) ? strip_tags( $new_instance['post_per_page'] ) : ''; //ifall post_per_page data finns så gör en ny instans
+		$instance['post_per_page'] = ( ! empty( $new_instance['post_per_page'] ) ) ? strip_tags( $new_instance['post_per_page'] ) : ''; //If post_per_page data exists make a new instance
 		return $instance;
 	}
-	/*
-	* Hämta antal poster som ska visas från widget-settings
-	*/
+	/**
+   * Get settings for post per page 
+   *
+   * @param Array $instance
+   *   Number of post per page
+   * @return Array
+   *   Returns post per page
+   */
 	public function get_post_per_page($instance){
 		$post_per_page = $instance;
 		return $post_per_page;
 	}
-	/*
-	*Hämtar en nerkortad del av inlägget
-	*/
+
+		/**
+   * Get excerpt version of post
+   *
+   * @param Int $post_id
+   *   Post ID
+   * @param Int $length
+   *   Length of excerpt
+   * @return Html
+   *   Returns excerpt of post
+   */
 	public function get_excerpt_by_id($post_id, $length) {
 
-	$the_post = get_post($post_id); //Hämtar post ID
-	$the_excerpt = $the_post->post_content; //Hämtar post_content som används som bas till sammanfattning
-	$excerpt_length = $length; //Längden på sammanfattningen
-	$the_excerpt = strip_tags(strip_shortcodes($the_excerpt)); //Tar bort taggar och bilder
-	$words = explode(' ', $the_excerpt, $excerpt_length + 1);
-		if(count($words) > $excerpt_length) :
-		array_pop($words);
-		array_push($words, '…');
-		$the_excerpt = implode(' ', $words);
-		endif;
-	$the_excerpt = '<p class="postexcerpt lead">' . $the_excerpt . '</p>';
-	return $the_excerpt;
+		$the_post = get_post($post_id); //Get post ID
+		$the_excerpt = $the_post->post_content; //Get post_content that is used for excerpt
+		$excerpt_length = $length; //Length of excerpt
+		$the_excerpt = strip_tags(strip_shortcodes($the_excerpt)); //strips tags and images
+		$words = explode(' ', $the_excerpt, $excerpt_length + 1);
+		if(count($words) > $excerpt_length) {
+			array_pop($words);
+			array_push($words, '…');
+			$the_excerpt = implode(' ', $words);
+		}
+		$the_excerpt = '<p class="postexcerpt lead">' . $the_excerpt . '</p>';
+		return $the_excerpt;
 
 	}
-	/*
-	*Visar ut våra poster med tillhörande bild
-	*/
+	/**
+	 * Outputs the content of the widget
+	 *
+	 * @param array $args
+	 * @param array $instance
+	 * Number of posts per page
+	 */
 	public function widget($args, $instance){
 
-		$posts = $this->get_custom_posts($this->get_post_per_page($instance['post_per_page'])); //hämtar poster och skickar in antal poster från wp_settings
+		$posts = $this->get_custom_posts($this->get_post_per_page($instance['post_per_page'])); // Get posts according to number of posts from settings 
 		$html = array(); 
-		foreach ($posts as $post) { //loopar igenom alla poster
-			$html[] = $post->post_title; //hämtar postens titel
-			if(has_post_thumbnail( $post->ID )){//kollar ifall posten har en bild
-				$html[] = get_the_post_thumbnail( $post->ID, array(50, 50)); //hämtar post bild
+		foreach ($posts as $post) { 
+			$html[] = $post->post_title; 
+			if(has_post_thumbnail( $post->ID )){
+				$html[] = get_the_post_thumbnail( $post->ID, array(50, 50));
 			}
-			$excerpt = $this->get_excerpt_by_id($post->ID, 50); //hämtar en sammanfattning av postens innehåll
+			$excerpt = $this->get_excerpt_by_id($post->ID, 50);
 			$html[] = $excerpt;
 		}
 		$output = implode(" ", $html);
-		echo $output; //visar ut html
+		echo $output; //shows html
 	}
-
 }
-// registrerar widgeten
+// register widget
 add_action('widgets_init', create_function('', 'return register_widget("show_custom_post_widget");'));
 ?>
