@@ -6,7 +6,9 @@ class show_custom_post_widget extends WP_Widget {
 	function show_custom_post_widget() {
 		parent::WP_Widget(false, $name = __('Show custom post', 'show_custom_post_widget') );
 	}
-
+	/*
+	*Hämtar vår custom_post_type
+	*/
 	public function get_custom_posts($post_per_page){
 		//vilken typ av post ska hämtas
 		$args = array( 'post_type' => 'custom_post', 'posts_per_page' => $post_per_page );
@@ -14,7 +16,9 @@ class show_custom_post_widget extends WP_Widget {
 		$posts = get_posts( $args );
 		return $posts;
 	}
-
+	/*
+	* Inställningar för widget
+	*/
 	public function form( $instance ) {
 		if ( isset( $instance[ 'post_per_page' ] ) ) { //om post_per_page har ett värde
 			$post_per_page = $instance[ 'post_per_page' ];//populera input fältet
@@ -29,16 +33,24 @@ class show_custom_post_widget extends WP_Widget {
 		</p>
 		<?php 
 	}
+	/*
+	*Updaterar våra inställningar
+	*/
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
 		$instance['post_per_page'] = ( ! empty( $new_instance['post_per_page'] ) ) ? strip_tags( $new_instance['post_per_page'] ) : ''; //ifall post_per_page data finns så gör en ny instans
 		return $instance;
 	}
+	/*
+	* Hämta antal poster som ska visas från widget-settings
+	*/
 	public function get_post_per_page($instance){
-		//hämta antal poster som ska visas från widget-settings
 		$post_per_page = $instance;
 		return $post_per_page;
 	}
+	/*
+	*Hämtar en nerkortad del av inlägget
+	*/
 	public function get_excerpt_by_id($post_id, $length) {
 
 	$the_post = get_post($post_id); //Hämtar post ID
@@ -55,6 +67,9 @@ class show_custom_post_widget extends WP_Widget {
 	return $the_excerpt;
 
 	}
+	/*
+	*Visar ut våra poster med tillhörande bild
+	*/
 	public function widget($args, $instance){
 
 		$posts = $this->get_custom_posts($this->get_post_per_page($instance['post_per_page'])); //hämtar poster och skickar in antal poster från wp_settings
