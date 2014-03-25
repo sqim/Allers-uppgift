@@ -11,16 +11,14 @@ License:
 ?>
 <?php
 
-/*Här definierar vi filvägar*/
+/*Here we define filepaths*/
 
 if (!defined('ABSPATH')) exit;
 define('PLUGIN_BASE_URL', plugins_url('allers') . '/'); 
 define('PLUGIN_BASE_DIR_LONG', dirname(__FILE__));
 
-/*Här laddar vi in pluginens filer*/
-
-/*Ladda in custom post type*/
+/*Including custom post type*/
 require_once(PLUGIN_BASE_DIR_LONG . '/custom.php');
-/*Ladda in widget*/
-require_once(PLUGIN_BASE_DIR_LONG . '/widget.php');
+/*Load widget*/
+require_once(PLUGIN_BASE_DIR_LONG . '/class/class.widget.php');
 ?>

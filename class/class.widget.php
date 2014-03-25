@@ -1,6 +1,6 @@
 <?php
 
-class show_custom_post_widget extends WP_Widget {
+class Show_Custom_Post_Widget extends WP_Widget {
 	
 	// constructor
 	function show_custom_post_widget() {
@@ -26,12 +26,7 @@ class show_custom_post_widget extends WP_Widget {
 		else {
 			$post_per_page = __( '3', 'text_domain' ); //placeholder siffra för input fält
 		}
-		?>
-		<p>
-		<label for="<?php echo $this->get_field_id( 'post_per_page' ); ?>"><?php _e( 'Antal poster:' ); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id( 'post_per_page' ); ?>" name="<?php echo $this->get_field_name( 'post_per_page' ); ?>" type="text" value="<?php echo esc_attr( $post_per_page ); ?>">
-		</p>
-		<?php 
+		include '/tempaltes/form.php';
 	}
 	/*
 	*Updaterar våra inställningar
