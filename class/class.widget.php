@@ -39,8 +39,8 @@ class Show_Custom_Post_Widget extends WP_Widget {
 		else {
 			$post_per_page = __( '3', 'text_domain' ); //placeholder
 		}
-		include '/templates/tpl.form.php';
-	}
+    include PLUGIN_BASE_DIR_LONG . '/templates/tpl.form.php';
+    }
 
 	/**
    * Update settings
